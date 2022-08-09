@@ -10,8 +10,11 @@ public:
             s[arr[i]] = i;
         vector<long long int> nWays(arr.size(), 1);   // init node itself, no children
         forward_list<pair<int,int>> multiplications[arr.size()];
+        int limit = sqrt(arr[arr.size()-1])+1;
         for(int i=0; i<arr.size(); i++)
         {
+            if(arr[i] > limit)
+                break;
             for(int j=i; j<arr.size(); j++)
             {
                 long long int m = (long long)arr[i] * arr[j];
