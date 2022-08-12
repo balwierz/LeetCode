@@ -9,10 +9,10 @@ class Solution:
     def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
         (p, q) = sorted([p.val, q.val])
         while(root):
-            if p<=root.val and q>=root.val:
-                return root
             if(q<root.val):
                 root = root.left
-            else:
+            elif(p>root.val):
                 root = root.right
+            else:
+                return root
         
