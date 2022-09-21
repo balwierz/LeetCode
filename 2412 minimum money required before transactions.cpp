@@ -1,3 +1,17 @@
+// shortened version:
+    long long minimumMoney(vector<vector<int>>& txn)
+    {
+        long long sumDelta = 0, biggestGain = 0;
+        for(vector<int>&v : txn)
+        {
+            long long delta = max(0, v[0] - v[1]);
+            sumDelta += delta;  
+            biggestGain = max(biggestGain, -delta + v[0]);
+        }
+        return biggestGain + sumDelta;
+    }
+
+
 class Solution {
 public:
     long long minimumMoney(vector<vector<int>>& txn)
