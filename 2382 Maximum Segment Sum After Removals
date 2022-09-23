@@ -1,0 +1,145 @@
+class Segment
+{
+public:
+    int beg, end;
+public:
+    Segment(int beg, int end) : beg(beg), end(end) {}
+    static vector<long long> cumSum;
+    long long score() const
+    {
+        return cumSum[end] - cumSum[beg];
+    }
+    bool operator<(const Segment &other) const
+    {
+        return end < other.end;
+    }
+};
+
+vector<long long> cumSum(vector<int> &nums)
+{
+    int n = nums.size();
+    vector<long long> ret (n+1);
+    ret[0] = 0;
+    long long tmp = 0;
+    for(int i=0; i<n; )
+    {
+        tmp += nums[i];
+        ret[++i] = tmp;
+    }
+    return ret;
+}
+
+vector<long long>Segment::cumSum = vector<long long>();
+
+class Solution2 {
+public:
+    vector<long long> maximumSegmentSum(vector<int>& nums, vector<int>& removeQueries)
+    {
+        vector<long long> ret;
+        int n = nums.size();
+        Segment::cumSum = cumSum(nums);
+        set<Segment> segments;
+        segments.emplace(0, n);
+        multiset<long long> scores;
+        scores.emplace(Segment::cumSum[n]);
+        for(int &query : removeQueries)
+        {
+            //cout << "query " << query << endl;
+            auto it = segments.upper_bound(Segment(query, query));
+            //cout << "breaking segment (" << it->beg << ", " << it->end << ") " << it->score() << endl;
+            scores.erase(scores.find(it->score()));
+            int beg = it->beg;
+            int end = it->end;
+            segments.erase(it);
+            if(beg < query)
+            {
+                //cout << "adding segment (" << beg << ", " << query << ") ";
+                Segment s(beg, query);
+                cout << s.score() << endl;
+                segments.insert(s);
+                scores.insert(s.score());
+            }
+            if(query+1 < end)
+            {
+                //cout << "adding segment (" << query+1 << ", " << end << ") ";
+                Segment s(query+1, end);
+                cout << s.score() << endl;
+                segments.insert(s);
+                scores.insert(s.score());
+            }
+            if(scores.rbegin() != scores.rend())
+            {
+                ret.push_back(*(scores.rbegin()));
+            }
+            else
+            {
+                ret.push_back(0);
+            }
+        }
+        return ret;
+    }
+};
+
+//IO
+int _IO=[](){
+	ios::sync_with_stdio(0);
+	cin.tie(0); //cout.tie(0);
+	return 0;
+}();
+
+
+#define LL long long
+
+class Solution {
+public:
+    vector<long long> maximumSegmentSum(vector<int>& nums, vector<int>& removeQueries) {
+        int n = nums.size();
+        
+        vector<LL> sums(n);
+        vector<LL> ans(n);
+        
+        vector<int> l(n, -1);
+        vector<int> r(n, -1);
+        
+        LL maxSum = 0;
+        
+        if (n == 1)
+        {
+            return ans;
+        }
+        
+        for (int i = n - 1; i >= 0; i--)
+        {
+            ans[i] = maxSum;
+            
+            int ind = removeQueries[i];
+            
+            sums[ind] = nums[ind];
+            
+            l[ind] = ind;
+            r[ind] = ind;
+            
+            if (ind + 1 < n && r[ind + 1] != -1)
+            {
+                r[ind] = r[ind + 1];
+                sums[ind] += sums[r[ind]];
+            }
+            
+            if (ind - 1 >= 0 && l[ind - 1] != -1)
+            {
+                l[ind] = l[ind - 1];
+                sums[ind] += sums[l[ind]];
+            }
+            
+            maxSum = max(maxSum, sums[ind]);
+            
+            l[r[ind]] = l[ind];
+            r[l[ind]] = r[ind];
+            
+            sums[l[ind]] = sums[ind];
+            sums[r[ind]] = sums[ind];
+        }
+        
+        return ans;
+    }
+};
