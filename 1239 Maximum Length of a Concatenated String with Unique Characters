@@ -1,0 +1,32 @@
+class Solution {
+    int str2mask(string s)
+    {
+        int ret = 0;
+        for(char c : s)
+        {
+            if(ret & (1 << (c - 'a')))
+                return 0;
+            ret |= 1 << (c - 'a');
+        }
+        return ret;
+    }
+public:
+    int maxLength(vector<string>& arr)
+    {   
+        forward_list<int> candidates;
+        candidates.push_front(0);
+        for(int i=0; i<arr.size(); i++)
+        {
+            int num = str2mask(arr[i]);
+            if(num == 0)
+                continue;
+            for(auto it = candidates.begin(); it != candidates.end(); it++)
+                if((*it & num) == 0)
+                    candidates.push_front(*it | num);
+        }
+        int ret = 0;
+        for(auto it = candidates.begin(); it != candidates.end(); it++)
+            ret = max(ret, __builtin_popcount(*it));
+        return ret;
+    }
+};
