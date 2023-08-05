@@ -8,7 +8,7 @@
 class Solution:
     def generateTrees(self, n: int) -> List[Optional[TreeNode]]:
         def dfs(nums):
-            return (treeNode(nums[i], l, r) for i in range(len(nums)) for l in dfs(nums[:i]) for r in dfs(nums[i+1:])) if nums else [None]
+            return [TreeNode(nums[i], l, r) for i in range(len(nums)) for l in dfs(nums[:i]) for r in dfs(nums[i+1:])] if nums else [None]
         return dfs(range(1, n+1))
 
 class Solution2:
