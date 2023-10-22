@@ -1,0 +1,7 @@
+#https://leetcode.com/problems/minimum-sum-of-mountain-triplets-i/description/
+class Solution:
+    def minimumSum(self, nums: List[int]) -> int:
+        left = list(accumulate(nums, func=min))
+        right = list(accumulate(nums[::-1], func=min))[::-1]
+        ret = min(left[i-1] + right[i+1] + nums[i] if left[i-1] < nums[i] and nums[i] > right[i+1] else inf for i in range(1, len(nums)-1))
+        return ret if ret < inf else -1
