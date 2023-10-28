@@ -3,23 +3,17 @@ class Solution {
 public:
     int countVowelPermutation(int n)
     {
-        vector<long long> num(128,0);
-        num['a'] = 1;
-        num['e'] = 1;
-        num['i'] = 1;
-        num['o'] = 1;
-        num['u'] = 1;
-        for(int i=1; i<n; i++)
+        long a = 1, e = 1, i = 1, o = 1, u = 1;
+        for(int j=1; j<n; j++)
         {
-            vector<long long> nn(128,0);
-            nn['a'] = ((num['e'] + num['i']) % mod + num['u']) % mod ;
-            nn['e'] = (num['a'] + num['i']) % mod;
-            nn['i'] = (num['e'] + num['o']) % mod;
-            nn['o'] = num['i'];
-            nn['u'] = (num['i'] + num['o']) % mod;
-            num = nn;
+            long na = (e + i + u) % mod ;
+            long ni = (e + o) % mod;
+            e = (a + i) % mod;
+            u = (i + o) % mod;
+            o = i;
+            a = na;
+            i = ni;
         }
-        return (((((num['a'] + num['e']) % mod + num['i']) % mod) + 
-            num['o']) % mod + num['u']) % mod;
+        return (a + e + i + o + u) % mod;
     }
 };
