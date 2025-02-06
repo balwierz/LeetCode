@@ -1,0 +1,3 @@
+class Solution:
+    def tupleSameProduct(self, nums: List[int]) -> int:
+        return 4*sum(x*(x-1) for x in Counter(a*b for a,b in combinations(nums, 2)).values())
