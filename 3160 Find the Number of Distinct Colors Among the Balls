@@ -1,0 +1,15 @@
+class Solution:
+    def queryResults(self, limit: int, queries: List[List[int]]) -> List[int]:
+        b2c = {}
+        c2b = defaultdict(set)
+        ret = []
+        for ball, colour in queries:
+            if ball in b2c:
+                oldCol = b2c[ball]
+                c2b[oldCol].remove(ball)
+                if len(c2b[oldCol]) == 0:
+                    del c2b[oldCol]
+            b2c[ball] = colour
+            c2b[colour].add(ball)
+            ret.append(len(c2b))
+        return ret
