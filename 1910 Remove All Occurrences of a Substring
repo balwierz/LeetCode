@@ -1,0 +1,11 @@
+class Solution:
+    def removeOccurrences(self, s: str, part: str) -> str:
+        stack = []
+        k = len(part)
+        w = list(part)
+        for x in s:
+            stack.append(x)
+            if stack[-k:] == w:
+                for _ in range(k):
+                    stack.pop()
+        return ''.join(stack)
