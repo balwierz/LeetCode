@@ -1,0 +1,19 @@
+class ProductOfNumbers:
+    def __init__(self):
+        self.cum = 1
+        self.lastZero = 0
+        self.d = [1]
+
+    def add(self, num: int) -> None:
+        if num:
+            self.cum *= num
+            self.d.append(self.cum)
+        else:
+            self.lastZero = len(self.d)
+            self.d.append(1)
+            self.cum = 1
+
+    def getProduct(self, k: int) -> int:
+        if self.lastZero >= len(self.d) - k:
+            return 0
+        return self.cum // self.d[-k-1]
