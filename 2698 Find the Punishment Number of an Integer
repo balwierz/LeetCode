@@ -1,0 +1,21 @@
+class Solution:    
+    def punishmentNumber(self, n: int) -> int:
+        def check(x: int):
+            s = str(x*x)
+            for b in range(2**(len(s)-1)):
+                a = [[s[0]],]
+                i = 1
+                for shift in range(len(s)-1):
+                    if b & (1 << shift):
+                        a.append([s[i]])
+                    else:
+                        a[-1].append(s[i])
+                    i += 1
+                y = 0
+                for z in a:
+                    y += int(''.join(z))
+                if y == x:
+                    return True
+            return False
+
+        return sum(x*x for x in range(n+1) if check(x))
